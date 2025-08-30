@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EDUCOMMEX— Learn to Code from Beginner to Pro</title>
+  <meta name="description" content="Free interactive website that teaches coding from beginner to pro. Learn HTML, CSS, JavaScript with examples, live playground, and auto-graded practice challenges." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/J6MdLecv8XWsox0lWm9N6U4Nf2rZtF1Jv8xKfAe7z0pniSIF9vDOMkMt2rt7AzGQ3Ct6W/3Yg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    :root {
+      --bg: #0e1116;
+      --surface: #151a23;
+      --surface-2: #0f1520;
+      --text: #e8eef6;
+      --muted: #9fb0c5;
+      --brand: #6dd6ff;
+      --brand-2: #7c3aed;
+      --accent: #22d3ee;
+      --ok: #22c55e;
+      --warn: #f59e0b;
+      --danger: #ef4444;
+      --card: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    :root.light {
+      --bg: #f6f7fb;
+      --surface: #ffffff;
+      --surface-2: #eef2ff;
+      --text: #0f172a;
+      --muted: #4b5563;
+      --brand: #4f46e5;
+      --brand-2: #0ea5e9;
+      --accent: #06b6d4;
+      --card: linear-gradient(180deg, rgba(0,0,0,0.04), rgba(0,0,0,0.02));
+      --shadow: 0 10px 30px rgba(2,6,23,.1);
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.55;
+    }
+
+    /* Header (hero) */
+    header.hero {
+      position: relative; overflow: hidden; text-align: center; padding: 110px 18px 90px;
+      background: radial-gradient(1200px 400px at 50% -10%, var(--brand-2) 0%, transparent 60%),
+                  radial-gradient(900px 300px at 90% 10%, var(--accent) 0%, transparent 60%),
+                  linear-gradient(135deg, #0b0f1a 0%, #151b29 100%);
+      isolation: isolate;
+      box-shadow: var(--shadow);
+      opacity: 0; transform: translateY(20px); animation: fadeInHero .9s ease-out forwards;
+    }
+    @keyframes fadeInHero { to { opacity: 1; transform: translateY(0);} }
+    header .badge { display:inline-flex; gap:8px; align-items:center; padding:6px 12px; border-radius:999px; background: rgba(255,255,255,.08); color: var(--muted); font-weight:600; }
+    header h1 { font-size: clamp(2rem, 4.6vw, 3.4rem); margin: 14px 0 8px; letter-spacing:.3px; }
+    header p.sub { max-width: 920px; margin: 0 auto 22px; color: var(--muted); font-size: clamp(1rem, 2.2vw, 1.15rem); }
+    .cta-row { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top: 18px; }
+    .btn { appearance:none; border:none; border-radius: 12px; padding: 12px 18px; font-weight:700; cursor:pointer; transition: transform .12s ease, filter .2s ease; box-shadow: var(--shadow); }
+    .btn:active { transform: translateY(1px) scale(.99); }
+    .btn-primary { background: linear-gradient(135deg, var(--brand), var(--brand-2)); color:#fff; }
+    .btn-ghost { background: rgba(255,255,255,.08); color: var(--text); backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,.1); }
+    .toggle { position: fixed; top: 14px; right: 14px; z-index: 1000; }
+
+    /* Nav */
+    nav.topnav { position: sticky; top: 0; z-index: 900; backdrop-filter: blur(6px); background: rgba(10,13,20,.6); border-bottom: 1px solid rgba(255,255,255,.06); }
+    :root.light nav.topnav { background: rgba(255,255,255,.7); border-bottom-color: rgba(0,0,0,.06); }
+    nav.topnav .wrap { max-width: 1200px; margin: 0 auto; display:flex; align-items:center; justify-content: space-between; padding: 10px 14px; }
+    .brand { display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.4px; }
+    .brand i { color: var(--accent); }
+    .links { display:flex; gap: 12px; flex-wrap: wrap; }
+    .links a { color: var(--text); text-decoration: none; padding: 8px 10px; border-radius: 8px; font-weight:600; opacity:.9; }
+    .links a:hover { background: rgba(255,255,255,.08); }
+
+    /* Sections */
+    section { padding: 70px 18px; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .section-title { font-size: clamp(1.6rem, 3.2vw, 2rem); margin: 0 0 22px; }
+    .section-sub { color: var(--muted); margin-top: -10px; }
+
+    .grid { display:grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    .card { background: var(--card); border: 1px solid rgba(255,255,255,.06); border-radius: 16px; padding: 18px; box-shadow: var(--shadow); }
+    :root.light .card { border-color: rgba(0,0,0,.06); }
+    .card h3 { margin: 8px 0 6px; }
+    .chip { display:inline-flex; gap:8px; align-items:center; padding: 6px 10px; border-radius: 999px; background: rgba(255,255,255,.08); color: var(--muted); font-weight:600; font-size: .9rem; }
+
+    /* Playground */
+    .playground { display:grid; gap: 14px; grid-template-columns: 1.1fr 1fr; }
+    .panes { display:grid; gap:10px; grid-template-columns: 1fr; }
+    .pane { display:flex; flex-direction: column; }
+    .pane label { font-size:.9rem; color: var(--muted); margin: 0 0 6px 2px; }
+    textarea.code { width: 100%; min-height: 140px; resize: vertical; border-radius: 10px; padding: 12px; border: 1px solid rgba(255,255,255,.08); background: #0b0f1a; color: #e6edf7; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    :root.light textarea.code { background: #0b1220; color: #e6edf7; }
+    .tools { display:flex; gap:10px; flex-wrap:wrap; }
+    .previewWrap { background: #0b0f1a; border: 1px solid rgba(255,255,255,.08); border-radius: 12px; overflow: hidden; min-height: 300px; }
+    .previewWrap iframe { width: 100%; height: 100%; border: 0; background: #fff; }
+
+    /* Challenge area */
+    .challenge { border-left: 4px solid var(--brand); padding-left: 14px; }
+    .test-result { margin-top: 10px; font-weight: 700; }
+
+    /* Scroll buttons */
+    .scroll-down { position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.18); color:#fff; border-radius: 999px; padding: 10px 16px; cursor:pointer; }
+    .scroll-up { position: fixed; right: 16px; bottom: -80px; opacity: 0; transform: translateY(20px); transition: all .25s ease; z-index: 950; }
+    .scroll-up.show { bottom: 22px; opacity: 1; transform: translateY(0); }
+
+    /* Footer */
+    footer { text-align:center; padding: 40px 18px; color: var(--muted); background: linear-gradient(180deg, transparent, rgba(255,255,255,.04)); border-top: 1px solid rgba(255,255,255,.06); }
+
+    /* Utilities */
+    .row { display:flex; gap: 10px; flex-wrap: wrap; align-items:center; }
+    .spacer { height: 16px; }
+
+    @media (max-width: 980px) { .playground { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <!-- Theme toggle -->
+  <button class="btn btn-ghost toggle" id="themeToggle" aria-label="Toggle light/dark"><i class="fa-solid fa-moon"></i></button>
+
+  <!-- Hero -->
+  <header class="hero" id="top">
+    <span class="badge"><i class="fa-solid fa-graduation-cap"></i> Beginner → Pro · HTML · CSS · JavaScript</span>
+    <h1>CodePro Academy</h1>
+    <p class="sub">Learn by doing: short lessons, runnable examples, an in-browser playground, and auto‑graded challenges that build real skills step by step.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#roadmap">Start Learning</a>
+      <button class="btn btn-ghost scroll-down" id="scrollDown">Scroll down <i class="fa-solid fa-arrow-down"></i></button>
+    </div>
+  </header>
+
+  <!-- Top Navigation (sticky) -->
+  <nav class="topnav" id="nav">
+    <div class="wrap">
+      <div class="brand"><i class="fa-solid fa-code"></i> <span>CodePro</span></div>
+      <div class="links">
+        <a href="#roadmap">Roadmap</a>
+        <a href="#html">HTML</a>
+        <a href="#css">CSS</a>
+        <a href="#js">JavaScript</a>
+        <a href="#projects">Projects</a>
+        <a href="#playground">Playground</a>
+        <a href="#challenges">Challenges</a>
+        <a href="#cheats">Cheat‑Sheet</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Roadmap -->
+  <section id="roadmap">
+    <div class="container">
+      <h2 class="section-title">Your Beginner → Pro Roadmap</h2>
+      <p class="section-sub">Follow this sequence. Each topic includes short theory, an example, and a “Try it” button that loads into the Playground.</p>
+      <div class="grid">
+        <div class="card"><div class="chip"><i class="fa-solid fa-seedling"></i> Foundations</div>
+          <h3>1) Web Basics</h3>
+          <p>What browsers do, how HTML structures content, CSS styles it, and JavaScript adds behavior.</p>
+        </div>
+        <div class="card"><div class="chip"><i class="fa-solid fa-layer-group"></i> HTML</div>
+          <h3>2) Semantic HTML</h3>
+          <p>Headings, lists, links, images, forms, accessibility, structure.</p>
+        </div>
+        <div class="card"><div class="chip"><i class="fa-solid fa-paintbrush"></i> CSS</div>
+          <h3>3) Modern CSS</h3>
+          <p>Selectors, cascade, Flexbox, Grid, responsive design, variables, transitions.</p>
+        </div>
+        <div class="card"><div class="chip"><i class="fa-solid fa-bolt"></i> JS</div>
+          <h3>4) JavaScript</h3>
+          <p>Syntax, functions, arrays/objects, DOM, events, fetch API, modules.</p>
+        </div>
+        <div class="card"><div class="chip"><i class="fa-solid fa-cubes"></i> Algorithms</div>
+          <h3>5) Problem Solving</h3>
+          <p>Loops, recursion, Big‑O intuition, common coding interview tasks.</p>
+        </div>
+        <div class="card"><div class="chip"><i class="fa-solid fa-diagram-project"></i> Projects</div>
+          <h3>6) Portfolio Projects</h3>
+          <p>Build real apps: a Todo app, Quiz app, Weather app, and a Landing page.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HTML Section -->
+  <section id="html">
+    <div class="container">
+      <h2 class="section-title">HTML — Structure the page</h2>
+      <p class="section-sub">HTML gives meaning to content. Use <code>&lt;header&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;section&gt;</code>, and friends to help both users and search engines.</p>
+      <div class="grid">
+        <div class="card">
+          <h3>Example: Basic Page</h3>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+  &lt;title&gt;My First Page&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;header&gt;Welcome!&lt;/header&gt;
+  &lt;main&gt;
+    &lt;h1&gt;Hello World&lt;/h1&gt;
+    &lt;p&gt;This is my first web page.&lt;/p&gt;
+  &lt;/main&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+          <button class="btn btn-primary" onclick='loadExample(`<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Hello</title><style>body{font-family:Inter,system-ui;padding:20px} h1{color:#4f46e5}</style></head><body><h1>Hello World 👋</h1><p>You can edit me in the playground!</p></body></html>`, "h1 { color: #4f46e5; }", "console.log(\"Welcome!\")")'>Try it</button>
+        </div>
+        <div class="card">
+          <h3>Forms: Collect input</h3>
+<pre><code>&lt;form&gt;
+  &lt;label&gt;Email &lt;input type="email" required&gt;&lt;/label&gt;
+  &lt;button&gt;Send&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+          <button class="btn btn-primary" onclick='loadExample(`<!DOCTYPE html><html><body><form onsubmit="event.preventDefault();msg.textContent=\'Thanks!\'">Email <input type=email required> <button>Send</button><p id=msg></p></form></body></html>`, "", "")'>Try it</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CSS Section -->
+  <section id="css">
+    <div class="container">
+      <h2 class="section-title">CSS — Make it look great</h2>
+      <p class="section-sub">Use Flexbox and Grid to build responsive layouts. Add transitions for polish.</p>
+      <div class="grid">
+        <div class="card">
+          <h3>Example: Card layout (Flexbox)</h3>
+<pre><code>.cards { display:flex; gap:12px; flex-wrap:wrap; }
+.card { flex: 1 1 220px; padding:14px; border-radius:10px; background:#fff; }
+</code></pre>
+          <button class="btn btn-primary" onclick='loadExample(`<!DOCTYPE html><html><head><style>body{font-family:Inter;padding:16px;background:#f6f7fb}.cards{display:flex;gap:12px;flex-wrap:wrap}.card{flex:1 1 220px;padding:14px;border-radius:10px;background:#fff;box-shadow:0 6px 20px rgba(0,0,0,.07)}</style></head><body><div class=cards><div class=card>One</div><div class=card>Two</div><div class=card>Three</div></div></body></html>`, ``, ``)'>Try it</button>
+        </div>
+        <div class="card">
+          <h3>Transitions</h3>
+<pre><code>button { transition: transform .15s ease; }
+button:hover { transform: translateY(-2px); }
+</code></pre>
+          <button class="btn btn-primary" onclick='loadExample(`<!DOCTYPE html><html><head><style>body{font-family:Inter;padding:30px}button{padding:12px 18px;border-radius:10px;border:0;background:#4f46e5;color:#fff;transition:transform .15s}button:hover{transform:translateY(-2px)}</style></head><body><button>Hover me</button></body></html>`, ``, ``)'>Try it</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JavaScript Section -->
+  <section id="js">
+    <div class="container">
+      <h2 class="section-title">JavaScript — Make it work</h2>
+      <p class="section-sub">Learn the language of the browser. Practice with functions, arrays, DOM, and APIs.</p>
+      <div class="grid">
+        <div class="card">
+          <h3>Example: Sum an array</h3>
+<pre><code>function sum(arr){
+  return arr.reduce((a,b)=>a+b,0);
+}
+console.log(sum([2,3,4])); // 9
+</code></pre>
+          <button class="btn btn-primary" onclick='loadExample(`<!DOCTYPE html><html><body><pre id=out></pre><script>function sum(arr){return arr.reduce((a,b)=>a+b,0)}document.getElementById("out").textContent = sum([2,3,4])</script></body></html>`, "", "")'>Try it</button>
+        </div>
+        <div class="card">
+          <h3>DOM: Toggle theme</h3>
+<pre><code>document.querySelector('#toggle')
+  .addEventListener('click', ()=>{
+    document.documentElement.classList.toggle('dark');
+  })
+</code></pre>
+          <button class="btn btn-primary" onclick='loadExample(`<!DOCTYPE html><html><head><style>:root{--bg:#111;--fg:#eee}.dark{--bg:#eee;--fg:#111}body{background:var(--bg);color:var(--fg);font-family:Inter;padding:20px}</style></head><body><button id=toggle>Toggle</button><script>document.querySelector("#toggle").addEventListener("click",()=>{document.body.classList.toggle("dark")})</script></body></html>`, "", "")'>Try it</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects">
+    <div class="container">
+      <h2 class="section-title">Mini Projects (build your portfolio)</h2>
+      <p class="section-sub">Clone these in the Playground, then customize and save.</p>
+      <div class="grid">
+        <div class="card">
+          <h3>Todo App</h3>
+          <p>LocalStorage‑backed todos with add/remove/complete.</p>
+          <button class="btn btn-primary" onclick='loadExample(window.examples.todo.html, window.examples.todo.css, window.examples.todo.js)'>Load in Playground</button>
+        </div>
+        <div class="card">
+          <h3>Quiz App</h3>
+          <p>Multiple choice with score and review screen.</p>
+          <button class="btn btn-primary" onclick='loadExample(window.examples.quiz.html, window.examples.quiz.css, window.examples.quiz.js)'>Load in Playground</button>
+        </div>
+        <div class="card">
+          <h3>Weather (mock)</h3>
+          <p>Fetch sample JSON and render a forecast.</p>
+          <button class="btn btn-primary" onclick='loadExample(window.examples.weather.html, window.examples.weather.css, window.examples.weather.js)'>Load in Playground</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Playground -->
+  <section id="playground">
+    <div class="container">
+      <h2 class="section-title">Live Playground</h2>
+      <p class="section-sub">Write HTML, CSS and JS. Click Run to see the result. Your work auto‑saves to your browser (localStorage).</p>
+      <div class="playground">
+        <div class="panes">
+          <div class="pane"><label>HTML</label><textarea class="code" id="htmlCode" spellcheck="false"></textarea></div>
+          <div class="pane"><label>CSS</label><textarea class="code" id="cssCode" spellcheck="false"></textarea></div>
+          <div class="pane"><label>JavaScript</label><textarea class="code" id="jsCode" spellcheck="false"></textarea></div>
+          <div class="tools">
+            <button class="btn btn-primary" id="runBtn"><i class="fa-solid fa-play"></i> Run</button>
+            <button class="btn btn-ghost" id="resetBtn"><i class="fa-solid fa-rotate"></i> Reset</button>
+            <button class="btn btn-ghost" id="saveBtn"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+            <button class="btn btn-ghost" id="clearBtn"><i class="fa-solid fa-trash"></i> Clear</button>
+          </div>
+        </div>
+        <div class="previewWrap">
+          <iframe id="preview"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Challenges -->
+  <section id="challenges">
+    <div class="container">
+      <h2 class="section-title">Practice Challenges (auto‑graded)</h2>
+      <p class="section-sub">Write a function in the editor and click Test. Results are shown below. (All challenges are pure JavaScript.)</p>
+      <div class="grid">
+        <div class="card challenge">
+          <h3>1) reverseString(str)</h3>
+          <p>Return the reversed string. Example: <code>"abc" → "cba"</code></p>
+          <textarea class="code" id="c1" rows="6">function reverseString(str){
+  // your code here
+}
+</textarea>
+          <div class="row">
+            <button class="btn btn-primary" onclick="runTests(1)">Test</button>
+            <button class="btn btn-ghost" onclick="hint(1)">Hint</button>
+            <button class="btn btn-ghost" onclick="solve(1)">Solution</button>
+          </div>
+          <div class="test-result" id="r1"></div>
+        </div>
+        <div class="card challenge">
+          <h3>2) isPrime(n)</h3>
+          <p>Return <code>true</code> if <code>n</code> is prime; otherwise <code>false</code>.</p>
+          <textarea class="code" id="c2" rows="6">function isPrime(n){
+  // your code here
+}
+</textarea>
+          <div class="row">
+            <button class="btn btn-primary" onclick="runTests(2)">Test</button>
+            <button class="btn btn-ghost" onclick="hint(2)">Hint</button>
+            <button class="btn btn-ghost" onclick="solve(2)">Solution</button>
+          </div>
+          <div class="test-result" id="r2"></div>
+        </div>
+        <div class="card challenge">
+          <h3>3) sumArray(arr)</h3>
+          <p>Return the sum of a number array. Example: <code>[1,2,3] → 6</code></p>
+          <textarea class="code" id="c3" rows="6">function sumArray(arr){
+  // your code here
+}
+</textarea>
+          <div class="row">
+            <button class="btn btn-primary" onclick="runTests(3)">Test</button>
+            <button class="btn btn-ghost" onclick="hint(3)">Hint</button>
+            <button class="btn btn-ghost" onclick="solve(3)">Solution</button>
+          </div>
+          <div class="test-result" id="r3"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+<!-- Cheat Sheet -->
+  <section id="cheats">
+    <div class="container">
+      <h2 class="section-title">Cheat‑Sheet</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>HTML</h3>
+          <ul>
+            <li><code>&lt;a href="/"&gt;Link&lt;/a&gt;</code></li>
+            <li><code>&lt;img src="x.jpg" alt="desc"&gt;</code></li>
+            <li><code>&lt;input type="text" placeholder="Your name"&gt;</code></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>CSS</h3>
+          <ul>
+            <li><code>display: flex; gap: 12px;</code></li>
+            <li><code>@media (max-width: 600px) { ... }</code></li>
+            <li><code>transition: transform .15s ease;</code></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>JS</h3>
+          <ul>
+            <li><code>const el = document.querySelector('#id')</code></li>
+            <li><code>arr.map(x =&gt; x*2)</code></li>
+            <li><code>fetch('/data.json').then(r =&gt; r.json())</code></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="container">
+      <h2 class="section-title">Contact & Community</h2>
+      <p class="section-sub">Have questions or want feedback on your code? Reach out and share your project links.</p>
+      <div class="card" style="display:grid; gap:10px;">
+        <div><i class="fa-solid fa-envelope"></i> <strong>Email:</strong>emezch93@gmail.com</div>
+        <div><i class="fa-brands fa-discord"></i> <strong>Discord:</strong> invite‑link</div>
+        <div class="row">
+          <a class="btn btn-primary" href="#top">Back to top</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <button class="btn btn-primary scroll-up" id="scrollUp" aria-label="Scroll to top"><i class="fa-solid fa-arrow-up"></i></button>
+
+  <footer>
+    <div>Built with ❤️ for learners • © <span id="year"></span> EDUCOMMEX</div>
+  </footer>
+
+<script>
+  // Theme persistence
+  const root = document.documentElement;
+  const savedTheme = localStorage.getItem('theme');
+  if(savedTheme === 'light') root.classList.add('light');
+  document.getElementById('themeToggle').addEventListener('click', ()=>{
+    root.classList.toggle('light');
+    localStorage.setItem('theme', root.classList.contains('light') ? 'light' : 'dark');
+  });
+
+  // Scroll buttons
+  document.getElementById('scrollDown').addEventListener('click', ()=>{
+    document.querySelector('#roadmap').scrollIntoView({behavior:'smooth'});
+  });
+  const scrollUp = document.getElementById('scrollUp');
+  window.addEventListener('scroll', ()=>{
+    if (window.scrollY > 400) scrollUp.classList.add('show'); else scrollUp.classList.remove('show');
+  });
+  scrollUp.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
+
+  // Playground logic
+  const htmlTA = document.getElementById('htmlCode');
+  const cssTA  = document.getElementById('cssCode');
+  const jsTA   = document.getElementById('jsCode');
+  const prev   = document.getElementById('preview');
+  const LSKEYH = 'cp_html', LSKEYC='cp_css', LSKEYJ='cp_js';
+  function render(){
+    const doc = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>${cssTA.value}</style></head><body>${htmlTA.value}<script>${jsTA.value}<\/script></body></html>`;
+    prev.srcdoc = doc;
+  }
+  function loadSaved(){
+    htmlTA.value = localStorage.getItem(LSKEYH) || '<h1>Hello 👋</h1>\n<p>Edit HTML here.</p>';
+    cssTA.value  = localStorage.getItem(LSKEYC) || 'body{font-family:Inter,system-ui;padding:20px}\nh1{color:#4f46e5}';
+    jsTA.value   = localStorage.getItem(LSKEYJ) || 'console.log("Ready!")';
+    render();
+  }
+  function saveAll(){
+    localStorage.setItem(LSKEYH, htmlTA.value);
+    localStorage.setItem(LSKEYC, cssTA.value);
+    localStorage.setItem(LSKEYJ, jsTA.value);
+  }
+  document.getElementById('runBtn').addEventListener('click', render);
+  document.getElementById('saveBtn').addEventListener('click', ()=>{ saveAll(); alert('Saved to your browser ✔'); });
+  document.getElementById('clearBtn').addEventListener('click', ()=>{ htmlTA.value=''; cssTA.value=''; jsTA.value=''; render(); });
+  document.getElementById('resetBtn').addEventListener('click', loadSaved);
+  window.addEventListener('load', loadSaved);
+
+  // Load example into playground
+  function loadExample(h, c, j){
+    htmlTA.value = h; cssTA.value = c; jsTA.value = j; render(); saveAll();
+    document.querySelector('#playground').scrollIntoView({behavior:'smooth'});
+  }
+  window.loadExample = loadExample;
+
+  // Example snippets for Projects
+  window.examples = {
+    todo: {
+      html: `<!DOCTYPE html><html><head><meta charset='utf-8'><style>body{font-family:Inter;padding:20px;max-width:700px;margin:auto} .row{display:flex;gap:8px} li{display:flex;justify-content:space-between;padding:8px;border:1px solid #eee;border-radius:8px;margin:6px 0}</style></head><body><h2>Todo</h2><div class=row><input id=txt placeholder='Add task...' style='flex:1'><button onclick='add()'>Add</button></div><ul id=list></ul><script>const key='todos_v1';const list=document.getElementById('list');const txt=document.getElementById('txt');let items=JSON.parse(localStorage.getItem(key)||'[]');function render(){list.innerHTML='';items.forEach((t,i)=>{const li=document.createElement('li');li.innerHTML='<span>'+t.text+'</span><div><button onclick="toggle('+i+')">'+(t.done?'Undo':'Done')+'</button> <button onclick="delItem('+i+')">✖</button></div>';if(t.done) li.style.opacity=.6;list.appendChild(li)});localStorage.setItem(key,JSON.stringify(items))}function add(){if(!txt.value.trim())return;items.push({text:txt.value.trim(),done:false});txt.value='';render()}function toggle(i){items[i].done=!items[i].done;render()}function delItem(i){items.splice(i,1);render()}render();</script></body></html>`,
+    },
+    quiz: {
+      html: `<!DOCTYPE html><html><head><meta charset='utf-8'><style>body{font-family:Inter;padding:20px;max-width:720px;margin:auto} .card{border:1px solid #eee;border-radius:10px;padding:16px} .opt{display:block;margin:8px 0}</style></head><body><h2>Quiz</h2><div class=card><div id=q></div><div id=opts></div><button id=next>Next</button><div id=score></div></div><script>const qs=[{q:'What does CSS stand for?',a:['Cascading Style Sheets','Creative Style System','Colorful Style Sheets'],c:0},{q:'Which tag creates a link?',a:['<link>','<a>','<href>'],c:1}];let i=0,s=0;const q=document.getElementById('q'),o=document.getElementById('opts'),n=document.getElementById('next'),sc=document.getElementById('score');function show(){const x=qs[i];q.textContent=x.q;o.innerHTML='';x.a.forEach((t,ix)=>{const b=document.createElement('button');b.className='opt';b.textContent=t;b.onclick=()=>{if(ix===x.c)s++;n.click()};o.appendChild(b)});sc.textContent = 'Score: '+s+'/'+qs.length}n.onclick=()=>{i++; if(i<qs.length) show(); else {q.textContent='Done!';o.innerHTML='';n.remove(); sc.textContent='Final score: '+s+'/'+qs.length}};show();</script></body></html>`,
+    
+    },
+    weather: {
+      html: `<!DOCTYPE html><html><head><meta charset='utf-8'><style>body{font-family:Inter;padding:20px;max-width:680px;margin:auto} .day{display:flex;justify-content:space-between;border:1px solid #eee;border-radius:10px;padding:12px;margin:6px 0}</style></head><body><h2>Weather (Mock)</h2><div id=wrap></div><script>const data=[{d:'Mon',hi:30,lo:22},{d:'Tue',hi:31,lo:21},{d:'Wed',hi:29,lo:20}];const wrap=document.getElementById('wrap');data.forEach(x=>{const div=document.createElement('div');div.className='day';div.innerHTML = '<strong>'+x.d+'</strong><span>'+x.lo+'°/'+x.hi+'°</span>';wrap.appendChild(div)});</script></body></html>`,
+      
+    }
+  
+<script>
+  // Challenge autograder
+  const tests = {
+    1: {
+      fnName: 'reverseString',
+      cases: [ ['abc','cba'], ['racecar','racecar'], ['Hello','olleH'] ],
+      hint: 'Use split(\'\') → reverse() → join(\'\') or a loop building the string backwards.',
+      solution: `function reverseString(str){\n  return str.split('').reverse().join('');\n}`
+    },
+    2: {
+      fnName: 'isPrime',
+      cases: [ [2,true], [3,true], [4,false], [17,true], [21,false] ],
+      hint: 'Handle n < 2 as false. Only check divisors up to sqrt(n).',
+      solution: `function isPrime(n){\n  if(n<2) return false;\n  for(let i=2;i*i<=n;i++){ if(n%i===0) return false; }\n  return true;\n}`
+    },
+    3: {
+      fnName: 'sumArray',
+      cases: [ [[1,2,3],6], [[-1,1,5],5] ],
+      hint: 'Use Array.reduce((a,b)=>a+b,0).',
+      solution: `function sumArray(arr){\n  return arr.reduce((a,b)=>a+b,0);\n}`
+    }
+  };
+
+  function runTests(id){
+    const ta = document.getElementById('c'+id);
+    const res = document.getElementById('r'+id);
+    const t = tests[id];
+    try{
+      // sandbox via Function constructor (limited)
+      const fn = new Function(ta.value + '; return typeof '+t.fnName+'!=="undefined" ? '+t.fnName+' : null;')();
+      if(!fn) throw new Error('Function `'+t.fnName+'` not found');
+      let ok = true, details=[];
+      for(const [input, expected] of t.cases){
+        const got = Array.isArray(input) ? fn(input) : fn(input);
+        const pass = JSON.stringify(got) === JSON.stringify(expected);
+        details.push((pass?'✅':'❌')+` input: ${JSON.stringify(input)} → got: ${JSON.stringify(got)} (expected ${JSON.stringify(expected)})`);
+        if(!pass) ok=false;
+      }
+      res.style.color = ok ? 'var(--ok)' : 'var(--danger)';
+      res.innerHTML = (ok? 'All tests passed!':'Some tests failed.') + '<br>'+details.join('<br>');
+    }catch(e){
+      res.style.color = 'var(--danger)';
+      res.textContent = 'Error: '+e.message;
+    }
+  }
+  function hint(id){
+    alert(tests[id].hint);
+  }
+  function solve(id){
+    const ta = document.getElementById('c'+id);
+    ta.value = tests[id].solution;
+  }
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+<footer class="ftr">
+   &copy; 2025 EDUCOMMEX Code–Space
+  
+</footer>
+</body>
+</html>
+
+  
