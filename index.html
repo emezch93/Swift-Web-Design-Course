@@ -3,184 +3,403 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EDUCOMMEX – Premium Coding | Course</title>
+  <title>Swift Web Design Course</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body { font-family: Arial, sans-serif; text-align: center; padding: 20px; margin: 0; background-color: #2F4F4F; }
-    h1 { color: darkblue; }
-
-    /* Fullscreen overlay for sign in */
-    .overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.9); display: flex;
-      justify-content: center; align-items: center; z-index: 9999;
+    .gradient-bg {
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
     }
-    .popup {
-      background: white; padding: 20px; border-radius: 10px;
-      width: 320px; text-align: center;
+    
+    .card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    input { padding: 10px; width: 90%; margin-top: 10px; border: 1px solid #ccc; border-radius: 5px; }
-    button { padding: 10px 20px; margin-top: 10px; border: none; border-radius: 6px; cursor: pointer; }
-    button.signin { background: green; color: white; }
-    button.unlock { background: green; color: white; }
-    button.admin { background: darkblue; color: white; }
-    button.playground { background: orangered; color: white; }
-    button.code-web { background: magenta; color: white; }
-    footer { margin-top: 40px; padding: 20px; background: #f5f5f5; border-radius: 10px; }
-    footer button { display: block; margin: 10px auto; width: 250px; background: darkred; text-align: center; color: white; }
-    .ftr { background-color: #333; color: white; font-size: 30px; padding: 10px; }
-
-    iframe { width: 100%; height: 500px; border-radius: 10px; }
-    .hidden { display: none; }
-    a{ text-decoration: none; }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+    
+    .btn-glow {
+      transition: all 0.3s ease;
+    }
+    
+    .btn-glow:hover {
+      box-shadow: 0 0 15px rgba(66, 153, 225, 0.6);
+      transform: translateY(-2px);
+    }
+    
+    .password-tag {
+      background: rgba(76, 175, 80, 0.1);
+      border: 1px solid rgba(76, 175, 80, 0.3);
+      color: #4CAF50;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 14px;
+      margin: 3px;
+      display: inline-block;
+    }
+    
+    .video-container {
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+    
+    .toggle-section {
+      transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+      overflow: hidden;
+    }
+    
+    .expandable {
+      max-height: 0;
+      opacity: 0;
+    }
+    
+    .expanded {
+      max-height: 500px;
+      opacity: 1;
+    }
+    
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba(76, 175, 80, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+    }
   </style>
 </head>
-<body>
-  <h1>Swift Web Design Course</h1>
+<body class="bg-gray-900 text-white min-h-screen">
+  <div class="gradient-bg py-6">
+    <div class="container mx-auto px-4 text-center">
+      <h1 class="text-4xl md:text-5xl font-bold mb-2">Swift Web Development</h1>
+      <p class="text-xl opacity-90">Beginner-Professional stage | Deployment</p>
+      <div class="w-24 h-1 bg-green-400 mx-auto mt-4 rounded-full"></div>
+    </div>
+  </div>
 
   <!-- Sign-in Popup -->
-  <div id="signin-overlay" class="overlay hidden">
-    <div class="popup">
-      <h2>Sign In</h2>
-      <input type="email" id="email" placeholder="Enter your email"><br>
-      <input type="password" id="password" placeholder="Enter your password"><br>
-      <button class="signin" onclick="signIn()">Sign In</button>
-      <p id="signin-msg" style="color:red;"></p>
+  <div id="signin-overlay" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 hidden">
+    <div class="bg-gray-800 rounded-2xl p-8 w-96 shadow-2xl">
+      <div class="text-center mb-6">
+        <h2 class="text-2xl font-bold text-green-400 mb-2">Welcome Back</h2>
+        <p class="text-gray-400">Sign in to continue your learning journey</p>
+      </div>
+      <input type="email" id="email" placeholder="Enter your email" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-green-500 text-white">
+      <input type="password" id="password" placeholder="Enter your password" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-green-500 text-white">
+      <button class="w-full py-3 bg-green-600 hover:bg-green-700 rounded-lg font-bold transition duration-300" onclick="signIn()">Sign In</button>
+      <p id="signin-msg" class="text-red-400 mt-3 text-sm"></p>
     </div>
   </div>
 
   <!-- Loading Popup -->
-  <div id="loading-overlay" class="overlay hidden">
-    <div class="popup">
-      <h2>Signing you in...</h2>
-      <p>Please wait</p>
+  <div id="loading-overlay" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 hidden">
+    <div class="bg-gray-800 rounded-2xl p-8 w-80 text-center shadow-2xl">
+      <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500 mx-auto mb-4"></div>
+      <h2 class="text-xl font-bold mb-2">Signing you in...</h2>
+      <p class="text-gray-400">Please wait while we prepare your course</p>
     </div>
   </div>
 
-  <!-- Unlock Section -->
-  <div id="unlock-section" style="display:none; margin-top:20px;">
-    <h2>Enter Course Password</h2>
-    <input type="password" id="unlockCode" placeholder="Enter password"><br>
-    <button class="unlock" onclick="unlockVideo()">Unlock Video</button>
-    <p id="unlock-msg" style="color:red;"></p>
+  <!-- Main Content -->
+  <div class="container mx-auto px-4 py-10">
+    <!-- Unlock Section -->
+    <div id="unlock-section" class="max-w-2xl mx-auto bg-gray-800 rounded-2xl p-8 mb-10 card hidden">
+      <h2 class="text-2xl font-bold text-center mb-6 text-green-400">Unlock Your Course</h2>
+      <div class="mb-6">
+        <input type="password" id="unlockCode" placeholder="Enter your access code" class="w-full p-4 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-white">
+      </div>
+      <button class="w-full py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 rounded-lg font-bold transition duration-300 btn-glow" onclick="unlockVideo()">Unlock Course</button>
+      <p id="unlock-msg" class="text-red-400 mt-3 text-center"></p>
+    </div>
+
+    <!-- Video Section -->
+    <div id="video-section" class="max-w-4xl mx-auto hidden">
+      <div class="video-container mb-8">
+        <div class="relative">
+          <video id="courseVideo" class="w-full" controls poster="https://placehold.co/800x450/1e3c72/ffffff?text=Web+Development+Course">
+            <source src="lv_0_20250126131315.mp4" type="video/mp4">
+            <!-- Fallback to YouTube if HTML5 video not supported -->
+            Your browser does not support the video tag.
+          </video>
+          <div id="youtube-fallback" class="hidden">
+            <iframe id="youtubeVideo" class="w-full h-96" src="" allowfullscreen frameborder="0"></iframe>
+          </div>
+        </div>
+      </div>
+      
+      <!-- User Info Toggle -->
+      <div class="bg-gray-800 rounded-2xl p-6">
+        <button id="toggleUserInfo" class="w-full flex justify-between items-center py-3 px-4 bg-gray-700 rounded-lg hover:bg-gray-600 transition duration-300">
+          <span class="font-bold">Your Account Information</span>
+          <i class="fas fa-chevron-down transition-transform duration-300" id="toggleIcon"></i>
+        </button>
+        <div id="userInfoContent" class="toggle-section expandable mt-4">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <p><strong>Email:</strong> <span id="userEmailDisplay"></span></p>
+            <p><strong>Access Code:</strong> <span id="userAccessCode"></span></p>
+            <p><strong>Status:</strong> <span class="text-green-400">Course Unlocked ✓</span></p>
+            <button class="mt-4 py-2 px-4 bg-red-600 hover:bg-red-700 rounded-lg transition duration-300" onclick="signOut()">Sign Out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Login -->
+    <div id="admin-login" class="max-w-2xl mx-auto bg-gray-800 rounded-2xl p-8 mb-10 card">
+      <h3 class="text-xl font-bold text-center mb-4">Admin Access</h3>
+      <p class="text-gray-400 text-center mb-6">Login with the OTP provided by the course curator to generate access codes</p>
+      <input type="password" id="adminPass" placeholder="Enter admin password" class="w-full p-4 bg-gray-700 border border-gray-600 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 text-white">
+      <button class="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-lg font-bold transition duration-300 btn-glow" onclick="checkAdmin()">Login as Admin</button>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="admin-panel" class="max-w-2xl mx-auto bg-gray-800 rounded-2xl p-8 mb-10 hidden">
+      <div class="text-center mb-6">
+        <h2 class="text-2xl font-bold text-blue-400">Password Generator</h2>
+        <p class="text-gray-400">Generate access codes for students</p>
+      </div>
+      
+      <button class="w-full py-3 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 rounded-lg font-bold mb-6 transition duration-300 btn-glow pulse" onclick="generatePassword()">Generate New Access Code</button>
+      
+      <div class="mb-4">
+        <p class="font-bold text-lg mb-2">Generated Access Code:</p>
+        <div id="generated" class="text-2xl font-bold text-green-400 py-3 px-4 bg-gray-700 rounded-lg break-all"></div>
+      </div>
+      
+      <div class="mb-6">
+        <p class="font-bold text-lg mb-3">All Active Access Codes:</p>
+        <div id="password-list" class="bg-gray-700 rounded-lg p-4 max-h-60 overflow-y-auto min-h-20">
+          <p class="text-gray-400">No codes generated yet</p>
+        </div>
+      </div>
+      
+      <div class="flex gap-3">
+        <button class="flex-1 py-2 bg-red-600 hover:bg-red-700 rounded-lg font-bold transition duration-300" onclick="clearPasswords()">Clear All Codes</button>
+        <button class="flex-1 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg font-bold transition duration-300" onclick="logoutAdmin()">Exit Admin Mode</button>
+      </div>
+    </div>
+
+    <!-- Learning Resources -->
+    <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-10">
+      <a href="Coding-practice.html" class="card" target="_self">
+        <div class="bg-gradient-to-r from-orange-600 to-red-600 rounded-2xl p-6 text-center">
+          <i class="fas fa-code text-4xl mb-4"></i>
+          <h3 class="text-xl font-bold mb-2">Code Editor</h3>
+          <p class="mb-4">Practice what you learn with our built-in code editor</p>
+          <button class="py-2 px-6 bg-white text-orange-600 font-bold rounded-lg hover:bg-orange-50 transition duration-300">Start Practicing</button>
+        </div>
+      </a>
+      
+      <a href="playground.html" class="card" target="_self">
+        <div class="bg-gradient-to-r from-pink-600 to-purple-600 rounded-2xl p-6 text-center">
+          <i class="fas fa-laptop-code text-4xl mb-4"></i>
+          <h3 class="text-xl font-bold mb-2">Coding Playground</h3>
+          <p class="mb-4">Explore interactive examples and advanced concepts</p>
+          <button class="py-2 px-6 bg-white text-pink-600 font-bold rounded-lg hover:bg-pink-50 transition duration-300">Explore Now</button>
+        </div>
+      </a>
+    </div>
+
+    <!-- Payment & Contact Section -->
+    <div class="max-w-4xl mx-auto mb-10">
+      <h3 class="text-2xl font-bold text-center mb-8">Payment & Support</h3>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="bg-gray-800 rounded-2xl p-6 text-center">
+          <i class="fas fa-university text-3xl text-blue-400 mb-4"></i>
+          <h4 class="font-bold mb-2">Bank Payment</h4>
+          <p class="text-lg">Opay: <strong>8185947780</strong></p>
+          <p class="text-gray-400">Ezenwa Chidera Emmanuel</p>
+          <p class="text-green-400 font-bold">₦5,000</p>
+        </div>
+        
+        <div class="bg-gray-800 rounded-2xl p-6 text-center">
+          <a href="https://wa.me/2348185947780" target="_blank" class="block">
+            <i class="fab fa-whatsapp text-3xl text-green-400 mb-4"></i>
+            <h4 class="font-bold mb-2">WhatsApp Support</h4>
+            <p class="text-gray-400">Confirm payment or get instructions</p>
+            <button class="mt-2 py-2 px-6 bg-green-600 hover:bg-green-700 rounded-lg font-bold transition duration-300">Contact Us</button>
+          </a>
+        </div>
+        
+        <div class="bg-gray-800 rounded-2xl p-6 text-center">
+          <a href="tel:+2348185947780" class="block" target="_blank">
+            <i class="fas fa-phone text-3xl text-blue-400 mb-4"></i>
+            <h4 class="font-bold mb-2">Call Admin</h4>
+            <p class="text-gray-400">For urgent inquiries</p>
+            <button class="mt-2 py-2 px-6 bg-blue-600 hover:bg-blue-700 rounded-lg font-bold transition duration-300">Call Now</button>
+          </a>
+        </div>
+        
+        <div class="bg-gray-800 rounded-2xl p-6 text-center">
+          <a href="mailto:emezch93@gmail.com" class="block" target="_blank">
+            <i class="fas fa-envelope text-3xl text-yellow-400 mb-4"></i>
+            <h4 class="font-bold mb-2">Email Support</h4>
+            <p class="text-gray-400">For detailed questions</p>
+            <button class="mt-2 py-2 px-6 bg-yellow-600 hover:bg-yellow-700 rounded-lg font-bold transition duration-300">Send Email</button>
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- Video Section -->
-  <div id="video-section" style="display:none;">
-    <h2>Course Video</h2>
-    <iframe id="courseVideo" src="" allowfullscreen></iframe>
-  </div>
-
-  <!-- Admin Login -->
-  <div id="admin-login" class="admin-login">
-    <h4>Login with OTP use, given by course curator to unlock the portal and get an OTP to unlock the video course</h4>
-    <input type="password" id="adminPass" placeholder="Enter the given password">
-    <button class="admin" onclick="checkAdmin()">Login</button>
-  </div>
-
-  <div id="admin-panel" class="admin-panel" style="display:none;">
-    <h2>Password Generator</h2>
-    <button class="admin" onclick="generatePassword()">Generate a Password</button>
-    <p><strong>Generated Password:</strong> <span id="generated"></span></p>
-  </div>
-
-  <!-- Extra Links -->
-  <a href="Coding-practice.html" target="_self"><button class="playground">Code Editor for Practical Learnings</button></a>
-  <p><a href="playground.html" target="_self"><button class="code-web">Explore our Coding Playground Website</button></a></p>
-
-  <!-- Footer -->
-  <footer>
-    <h3>Payment & Contact</h3>
-    <button><i class="fas fa-university"></i> Bank: Opay – 8185947780 (Ezenwa Chidera Emmanuel) <br>Payment Price: 5,000</button>
-    <a href="https://wa.me/2348185947780" target="_blank"><button><i class="fab fa-whatsapp"></i> WhatsApp: confirm payment | instructions</button></a>
-    <a href="tel:+2348185947780" target="_blank"><button><i class="fas fa-phone"></i> Call Admin</button></a>
-    <a href="mailto:emezch93@gmail.com" target="_blank"><button><i class="fas fa-envelope"></i> Email Admin</button></a>
+  <footer class="bg-gray-800 py-6 text-center">
+    <p class="text-gray-400">&copy; 2025 EDUCOMMEX Premium Web Development Course. All rights reserved.</p>
   </footer>
 
-  <footer class="ftr">&copy;2025_Premium coding course</footer>
-
   <script>
-    // ---- On load check login ----
-    if (!localStorage.getItem("userEmail")) {
-      document.getElementById("signin-overlay").classList.remove("hidden");
-    } else {
-      checkUnlockStatus();
-    }
+    // Check if user is already logged in AND course is unlocked
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check if user is logged in
+      if (localStorage.getItem("userEmail")) {
+        document.getElementById("userEmailDisplay").textContent = localStorage.getItem("userEmail");
+        
+        // Check if course is already unlocked
+        if (localStorage.getItem("courseUnlocked") === "true") {
+          showVideo();
+          document.getElementById("unlock-section").classList.add("hidden");
+          document.getElementById("video-section").classList.remove("hidden");
+        } else {
+          document.getElementById("unlock-section").classList.remove("hidden");
+        }
+      } else {
+        document.getElementById("signin-overlay").classList.remove("hidden");
+      }
+      loadPasswords();
+      
+      // Check if browser supports HTML5 video
+      checkVideoSupport();
+    });
 
-    // ---- Sign-in logic ----
+    // Toggle user info section
+    document.getElementById("toggleUserInfo").addEventListener("click", function() {
+      const content = document.getElementById("userInfoContent");
+      const icon = document.getElementById("toggleIcon");
+      
+      if (content.classList.contains("expanded")) {
+        content.classList.remove("expanded");
+        content.classList.add("expandable");
+        icon.classList.remove("rotate-180");
+      } else {
+        content.classList.remove("expandable");
+        content.classList.add("expanded");
+        icon.classList.add("rotate-180");
+      }
+    });
+
+    // ---- Sign-in logic (using localStorage for persistence) ----
     function signIn() {
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
       const msg = document.getElementById("signin-msg");
 
-      const emailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/; // only gmail allowed
-
-      if (!email.match(emailPattern)) {
-        msg.textContent = "Invalid email. Please use format: example@gmail.com";
-        return;
-      }
-      if (password.length < 4) {
-        msg.textContent = "Password must be at least 4 characters.";
+      if (!email || !password) {
+        msg.textContent = "Please enter both email and password";
         return;
       }
 
+      // Store in localStorage so user doesn't have to sign in again
       localStorage.setItem("userEmail", email);
       localStorage.setItem("userPassword", password);
+      document.getElementById("userEmailDisplay").textContent = email;
 
-      // Hide sign-in, show loading
       document.getElementById("signin-overlay").classList.add("hidden");
       document.getElementById("loading-overlay").classList.remove("hidden");
 
       setTimeout(() => {
         document.getElementById("loading-overlay").classList.add("hidden");
         const username = email.split("@")[0];
-        alert("You have successfully signed in " + username);
-        checkUnlockStatus();
-      }, 5000);
+        alert("Welcome back, " + username + "!");
+        
+        // Check if course is already unlocked
+        if (localStorage.getItem("courseUnlocked") === "true") {
+          showVideo();
+          document.getElementById("unlock-section").classList.add("hidden");
+          document.getElementById("video-section").classList.remove("hidden");
+        } else {
+          document.getElementById("unlock-section").classList.remove("hidden");
+        }
+      }, 2000);
     }
 
-    // ---- Unlock logic ----
-    function checkUnlockStatus() {
-      if (localStorage.getItem("courseUnlocked") === "true") {
-        showVideo();
-      } else {
-        document.getElementById("unlock-section").style.display = "block";
-      }
+    // Sign out function (clears everything)
+    function signOut() {
+      localStorage.clear();
+      location.reload();
     }
 
+    // ---- Unlock logic (now using localStorage for persistence) ----
     function unlockVideo() {
       const code = document.getElementById("unlockCode").value.trim();
       const msg = document.getElementById("unlock-msg");
       const validPasswords = JSON.parse(localStorage.getItem("validPasswords") || "[]");
 
       if (validPasswords.includes(code)) {
+        // Store in localStorage so course stays unlocked
         localStorage.setItem("courseUnlocked", "true");
-        msg.style.color = "green";
-        msg.textContent = "Unlocking video...";
+        localStorage.setItem("userAccessCode", code);
+        document.getElementById("userAccessCode").textContent = code;
+        
+        msg.style.color = "#4CAF50";
+        msg.textContent = "Access granted! Loading your course...";
+        
         setTimeout(() => {
-          document.getElementById("unlock-section").style.display = "none";
+          document.getElementById("unlock-section").classList.add("hidden");
           showVideo();
         }, 1500);
       } else {
-        msg.textContent = "Invalid password. Please contact admin.";
+        msg.textContent = "Invalid access code. Please contact admin.";
       }
     }
 
     function showVideo() {
-      document.getElementById("video-section").style.display = "block";
-      document.getElementById("courseVideo").src = "https://www.youtube.com/embed/ZoQ-406vB0g?autoplay=1";
+      document.getElementById("video-section").classList.remove("hidden");
+      
+      // Try HTML5 video first
+      const video = document.getElementById("courseVideo");
+      const youtubeFallback = document.getElementById("youtube-fallback");
+      const youtubeVideo = document.getElementById("youtubeVideo");
+      
+      if (video.canPlayType('video/mp4')) {
+        video.load();
+        video.play().catch(e => console.log("Autoplay prevented:", e));
+      } else {
+        // Fallback to YouTube
+        document.getElementById("courseVideo").style.display = "none";
+        youtubeFallback.classList.remove("hidden");
+        youtubeVideo.src = "https://www.youtube.com/embed/ZoQ-406vB0g?autoplay=1";
+      }
+    }
+
+    // Check video support
+    function checkVideoSupport() {
+      const video = document.createElement('video');
+      if (!video.canPlayType || !video.canPlayType('video/mp4')) {
+        // Browser doesn't support HTML5 video well, prepare YouTube fallback
+        document.getElementById("courseVideo").style.display = "none";
+        document.getElementById("youtube-fallback").classList.remove("hidden");
+      }
     }
 
     // ---- Admin logic ----
     function checkAdmin() {
-      const adminPassword = "JBSWY3DPEHPK3PXPZPCVAFJSLCBBSKKDBXBBXJNCLFKCNNDNNCMCMCMMCMGMGMM«»‡/_-™π¢°€§¥§¢∆€✓¥™¥÷{¥[€{¢}¢[[¢{¢}€★";
+      const adminPassword = "JBSWY3DPEHPK3PXPZPCVAFJSLCBBSKKDBXBBXJNCLFKCNNDNNCMCMCMMCMGMGMM";
       const input = document.getElementById("adminPass").value.trim();
+      
       if (input === adminPassword) {
-        document.getElementById("admin-login").style.display = "none";
-        document.getElementById("admin-panel").style.display = "block";
+        document.getElementById("admin-login").classList.add("hidden");
+        document.getElementById("admin-panel").classList.remove("hidden");
       } else {
         alert("Wrong Admin Password!");
       }
+    }
+
+    function logoutAdmin() {
+      document.getElementById("admin-panel").classList.add("hidden");
+      document.getElementById("admin-login").classList.remove("hidden");
     }
 
     function generatePassword() {
@@ -192,9 +411,44 @@
       document.getElementById("generated").textContent = pass;
 
       let stored = JSON.parse(localStorage.getItem("validPasswords") || "[]");
-      stored.push(pass);
-      localStorage.setItem("validPasswords", JSON.stringify(stored));
+      if (!stored.includes(pass)) {
+        stored.push(pass);
+        localStorage.setItem("validPasswords", JSON.stringify(stored));
+        updatePasswordList();
+      }
     }
+
+    function loadPasswords() {
+      updatePasswordList();
+    }
+
+    function updatePasswordList() {
+      const passwords = JSON.parse(localStorage.getItem("validPasswords") || "[]");
+      const listElement = document.getElementById("password-list");
+      listElement.innerHTML = "";
+      
+      if (passwords.length === 0) {
+        listElement.innerHTML = "<p class='text-gray-400'>No codes generated yet</p>";
+      } else {
+        passwords.forEach((pass, index) => {
+          const passElement = document.createElement("div");
+          passElement.className = "password-tag";
+          passElement.textContent = pass;
+          listElement.appendChild(passElement);
+        });
+      }
+    }
+
+    function clearPasswords() {
+      if (confirm("Are you sure you want to clear all generated access codes? This will invalidate all existing codes.")) {
+        localStorage.removeItem("validPasswords");
+        document.getElementById("generated").textContent = "";
+        updatePasswordList();
+        // Also clear course unlocked status for all users
+        localStorage.removeItem("courseUnlocked");
+      }
+    }
+  
   </script>
 </body>
 </html>
