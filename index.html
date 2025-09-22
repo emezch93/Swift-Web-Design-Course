@@ -76,7 +76,7 @@
   <div class="gradient-bg py-6">
     <div class="container mx-auto px-4 text-center">
       <h1 class="text-4xl md:text-5xl font-bold mb-2">Swift Web Development</h1>
-      <p class="text-xl opacity-90">Beginner-Professional stage | Deployment</p>
+      <p class="text-xl opacity-90">Beginner–Professional Stage | Deployment </p>
       <div class="w-24 h-1 bg-green-400 mx-auto mt-4 rounded-full"></div>
     </div>
   </div>
@@ -120,14 +120,8 @@
     <div id="video-section" class="max-w-4xl mx-auto hidden">
       <div class="video-container mb-8">
         <div class="relative">
-          <video id="courseVideo" class="w-full" controls poster="https://placehold.co/800x450/1e3c72/ffffff?text=Web+Development+Course">
-            <source src="lv_0_20250126131315.mp4" type="video/mp4">
-            <!-- Fallback to YouTube if HTML5 video not supported -->
-            Your browser does not support the video tag.
-          </video>
-          <div id="youtube-fallback" class="hidden">
-            <iframe id="youtubeVideo" class="w-full h-96" src="" allowfullscreen frameborder="0"></iframe>
-          </div>
+          <!-- YouTube iframe - Default video player -->
+          <iframe id="youtubeVideo" class="w-full h-96" src="" allowfullscreen frameborder="0"></iframe>
         </div>
       </div>
       
@@ -247,7 +241,7 @@
   </div>
 
   <footer class="bg-gray-800 py-6 text-center">
-    <p class="text-gray-400">&copy; 2025 EDUCOMMEX Premium Web Development Course. All rights reserved.</p>
+    <p class="text-gray-400">&copy; 2025_Premium Web Development Course. All rights reserved.</p>
   </footer>
 
   <script>
@@ -269,9 +263,6 @@
         document.getElementById("signin-overlay").classList.remove("hidden");
       }
       loadPasswords();
-      
-      // Check if browser supports HTML5 video
-      checkVideoSupport();
     });
 
     // Toggle user info section
@@ -324,8 +315,7 @@
         }
       }, 2000);
     }
-
-    // Sign out function (clears everything)
+// Sign out function (clears everything)
     function signOut() {
       localStorage.clear();
       location.reload();
@@ -355,33 +345,13 @@
       }
     }
 
+    // Show video function - now using YouTube as default
     function showVideo() {
       document.getElementById("video-section").classList.remove("hidden");
       
-      // Try HTML5 video first
-      const video = document.getElementById("courseVideo");
-      const youtubeFallback = document.getElementById("youtube-fallback");
+      // Always use YouTube as the video player
       const youtubeVideo = document.getElementById("youtubeVideo");
-      
-      if (video.canPlayType('video/mp4')) {
-        video.load();
-        video.play().catch(e => console.log("Autoplay prevented:", e));
-      } else {
-        // Fallback to YouTube
-        document.getElementById("courseVideo").style.display = "none";
-        youtubeFallback.classList.remove("hidden");
-        youtubeVideo.src = "https://www.youtube.com/embed/ZoQ-406vB0g?autoplay=1";
-      }
-    }
-
-    // Check video support
-    function checkVideoSupport() {
-      const video = document.createElement('video');
-      if (!video.canPlayType || !video.canPlayType('video/mp4')) {
-        // Browser doesn't support HTML5 video well, prepare YouTube fallback
-        document.getElementById("courseVideo").style.display = "none";
-        document.getElementById("youtube-fallback").classList.remove("hidden");
-      }
+      youtubeVideo.src = "https://www.youtube.com/embed/ZoQ-406vB0g?autoplay=1&mute=0";
     }
 
     // ---- Admin logic ----
@@ -448,7 +418,6 @@
         localStorage.removeItem("courseUnlocked");
       }
     }
-  
   </script>
 </body>
 </html>
